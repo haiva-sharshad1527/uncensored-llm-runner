@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODEL_TYPE="gemma"
 PROMPT=""
 IMAGE_PATH=""
-MAX_TOKENS=2048
+MAX_TOKENS=512
 REASONING_INPUT="off"
 
 show_help() {
@@ -27,7 +27,7 @@ Options:
                                   • medium : Balanced Chain-of-Thought reasoning
                                   • high   : Deep reasoning for complex math/logic
   -i, --image <path>            Path to image file for vision analysis (Gemma model)
-  -n, --max-tokens <int>        Maximum generation tokens limit (default: 2048)
+  -n, --max-tokens <int>        Maximum generation tokens limit (default: 512)
   -h, --help                    Show this help message and exit
 
 Examples:

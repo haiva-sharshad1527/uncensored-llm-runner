@@ -3,7 +3,7 @@ param (
     [string]$Model = "gemma",
     [string]$Prompt = "",
     [string]$Image = "",
-    [int]$MaxTokens = 2048,
+    [int]$MaxTokens = 512,
     [string]$Reasoning = "off",
     [switch]$Help
 )
@@ -26,7 +26,7 @@ Parameters:
                                            • medium : Balanced Chain-of-Thought reasoning
                                            • high   : Deep reasoning for complex math/logic
   -Image <path>                         Path to image file for vision analysis (Gemma model)
-  -MaxTokens <int>                      Maximum generation tokens limit (default: 2048)
+  -MaxTokens <int>                      Maximum generation tokens limit (default: 512)
   -Help                                 Show this help message and exit
 
 Examples:
