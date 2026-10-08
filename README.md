@@ -1,6 +1,6 @@
 # Uncensored Local LLM Suite (Gemma 4 & Qwen 2.5 Coder)
 
-A production-ready, cross-platform local AI setup for running **100% Uncensored** models on-demand with zero subscription costs and full privacy.
+A production-ready, cross-platform local AI setup for running **100% Uncensored** models with zero subscription costs and full privacy.
 
 Supports **Linux, macOS, and Windows** (CPU & ARM64 optimized).
 
@@ -19,47 +19,50 @@ Supports **Linux, macOS, and Windows** (CPU & ARM64 optimized).
 
 ---
 
-## 🚀 Quick Setup Guide
+## 🚀 Quick Start Guide
 
-### 🐧 Linux / macOS
+### 💬 1. Multi-Turn Interactive Chat Mode (`chat.sh` / `chat.ps1`)
+Launch a continuous terminal chat session that remembers full conversation context across turns:
+
 ```bash
-# 1. Clone the repository
-git clone https://github.com/haiva-sharshad1527/uncensored-llm-runner.git
-cd uncensored-llm-runner
-
-# 2. Run automated setup (downloads models & compiles native llama-cli)
-chmod +x setup.sh ask.sh
-./setup.sh
-
-# 3. Query models on-demand
-./ask.sh --model gemma --prompt "Explain binary license verification algorithms."
-./ask.sh --model qwen --prompt "Write a Python script for JWT token validation."
-./ask.sh --model gemma --image /path/to/screenshot.png --prompt "Analyze this diagram."
+# Linux / macOS
+./chat.sh --model gemma
+./chat.sh --model qwen
 ```
 
-### 🪟 Windows (PowerShell)
 ```powershell
-# 1. Open PowerShell and clone repository
-git clone https://github.com/haiva-sharshad1527/uncensored-llm-runner.git
-cd uncensored-llm-runner
+# Windows PowerShell
+.\chat.ps1 -Model gemma
+.\chat.ps1 -Model qwen
+```
 
-# 2. Run setup script (downloads pre-built Windows llama-cli.exe and GGUF models)
-.\setup.ps1
+### ⚡ 2. Single-Shot Fast Query (`ask.sh` / `ask.ps1`)
+Query a model for a single answer and exit immediately (uses 0 RAM when idle):
 
-# 3. Query models on-demand
-.\ask.ps1 -Model gemma -Prompt "Explain binary license verification algorithms."
-.\ask.ps1 -Model qwen -Prompt "Write a Python script for JWT token validation."
-.\ask.ps1 -Model gemma -Image C:\path\to\image.png -Prompt "Analyze this diagram."
+```bash
+# Linux / macOS
+./ask.sh --model gemma --prompt "Explain binary license validation."
+./ask.sh --model qwen --prompt "Write a Python JWT validation script."
 ```
 
 ---
 
-## ⚡ Performance & Resource Optimization
+## ⚙️ Automated Installation
 
-* **Zero Idle RAM:** Models execute single-shot and immediately exit, freeing 100% of system RAM.
-* **FlashAttention-2 (`--flash-attn on`):** 3x faster prompt processing ($O(N)$ memory tiles).
-* **INT8 KV Cache (`--cache-type-k/v q8_0`):** 50% RAM savings (~1.8 GB reserved context).
-* **Physical Thread Pinning (`-t 4`):** Prevents CPU core context-switching thrashing.
+### 🐧 Linux / macOS
+```bash
+git clone https://github.com/haiva-sharshad1527/uncensored-llm-runner.git
+cd uncensored-llm-runner
+chmod +x setup.sh ask.sh chat.sh
+./setup.sh
+```
+
+### 🪟 Windows (PowerShell)
+```powershell
+git clone https://github.com/haiva-sharshad1527/uncensored-llm-runner.git
+cd uncensored-llm-runner
+.\setup.ps1
+```
 
 ---
 
