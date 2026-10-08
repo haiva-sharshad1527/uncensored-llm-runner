@@ -1,0 +1,8 @@
+models/
+bin/
+*.gguf
+*.bin
+*.exe
+*.log
+__pycache__/
+.venv/
