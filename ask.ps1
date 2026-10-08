@@ -3,12 +3,12 @@ param (
     [string]$Model = "gemma",
     [string]$Prompt = "",
     [string]$Image = "",
-    [int]$MaxTokens = 1024,
+    [int]$MaxTokens = 2048,
     [string]$Reasoning = "off"
 )
 
 if (-not $Prompt) {
-    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning on|off] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
+    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning on|off] [-MaxTokens 2048] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
     exit 1
 }
 
