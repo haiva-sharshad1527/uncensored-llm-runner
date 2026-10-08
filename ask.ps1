@@ -3,11 +3,12 @@ param (
     [string]$Model = "gemma",
     [string]$Prompt = "",
     [string]$Image = "",
-    [int]$MaxTokens = 512
+    [int]$MaxTokens = 1024,
+    [string]$Reasoning = "off"
 )
 
 if (-not $Prompt) {
-    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
+    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning on|off] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
     exit 1
 }
 
@@ -47,8 +48,9 @@ $LlamaArgs = @(
     "-p", $Prompt,
     "-n", $MaxTokens,
     "-t", "4",
-    "-c", "2048",
+    "-c", "4096",
     "-b", "512",
+    "-rea", $Reasoning,
     "--simple-io",
     "--no-display-prompt",
     "-st",

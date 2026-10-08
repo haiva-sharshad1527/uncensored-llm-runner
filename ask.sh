@@ -5,7 +5,8 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODEL_TYPE="gemma"
 PROMPT=""
 IMAGE_PATH=""
-MAX_TOKENS=512
+MAX_TOKENS=1024
+REASONING="off"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -25,6 +26,10 @@ while [[ $# -gt 0 ]]; do
       MAX_TOKENS="$2"
       shift 2
       ;;
+    --reasoning|-r)
+      REASONING="$2"
+      shift 2
+      ;;
     *)
       if [[ -z "$PROMPT" ]]; then
         PROMPT="$1"
@@ -35,7 +40,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$PROMPT" ]]; then
-  echo "Usage: ./ask.sh [--model gemma|qwen] [--image /path/to/image.jpg] --prompt \"Your prompt here\""
+  echo "Usage: ./ask.sh [--model gemma|qwen] [--reasoning on|off] [--image /path/to/image.jpg] --prompt \"Your prompt here\""
   exit 1
 fi
 
@@ -75,8 +80,9 @@ fi
   -p "$PROMPT" \
   -n "$MAX_TOKENS" \
   -t 4 \
-  -c 2048 \
+  -c 4096 \
   -b 512 \
+  -rea "$REASONING" \
   --simple-io \
   --no-display-prompt \
   -st \
