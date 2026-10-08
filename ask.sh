@@ -138,6 +138,9 @@ fi
   -t 4 \
   -c 4096 \
   -b 512 \
+  --flash-attn on \
+  --cache-type-k q8_0 \
+  --cache-type-v q8_0 \
   "${REASONING_ARGS[@]}" \
   --simple-io \
   --no-display-prompt \
