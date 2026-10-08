@@ -8,8 +8,42 @@ IMAGE_PATH=""
 MAX_TOKENS=2048
 REASONING_INPUT="off"
 
+show_help() {
+  cat << EOF
+Uncensored LLM Runner - High-Performance Local AI Execution
+
+Usage:
+  ./ask.sh [options] --prompt "Your prompt here"
+  ./ask.sh [options] "Your prompt here"
+
+Options:
+  -m, --model <gemma|qwen>      Pick model architecture (default: gemma)
+                                  • gemma : Gemma 4 E4B OBLITERATED (4.5B Multimodal Text+Vision)
+                                  • qwen  : Qwen 2.5 Coder 7B Abliterated (7.0B Claude Distilled Code)
+  -r, --reasoning <off|low|medium|high|on>
+                                Set thinking/reasoning effort level (default: off)
+                                  • off    : Fast direct answer starting on line 1
+                                  • low    : Minimal Chain-of-Thought reasoning
+                                  • medium : Balanced Chain-of-Thought reasoning
+                                  • high   : Deep reasoning for complex math/logic
+  -i, --image <path>            Path to image file for vision analysis (Gemma model)
+  -n, --max-tokens <int>        Maximum generation tokens limit (default: 2048)
+  -h, --help                    Show this help message and exit
+
+Examples:
+  ./ask.sh --model gemma --prompt "Explain binary license validation."
+  ./ask.sh --model qwen --prompt "Write a Python JWT validation script."
+  ./ask.sh --model gemma --reasoning high --prompt "Solve this complex logic puzzle."
+  ./ask.sh --model gemma --image /path/to/diagram.jpg --prompt "Describe this image."
+EOF
+  exit 0
+}
+
 while [[ $# -gt 0 ]]; do
   case $1 in
+    --help|-h)
+      show_help
+      ;;
     --model|-m)
       MODEL_TYPE="$2"
       shift 2
@@ -40,8 +74,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$PROMPT" ]]; then
-  echo "Usage: ./ask.sh [--model gemma|qwen] [--reasoning off|low|medium|high|on] [--max-tokens 2048] [--image /path/to/image.jpg] --prompt \"Your prompt here\""
-  exit 1
+  show_help
 fi
 
 # Reasoning Effort Mapping

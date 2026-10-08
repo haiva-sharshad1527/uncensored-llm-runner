@@ -4,12 +4,42 @@ param (
     [string]$Prompt = "",
     [string]$Image = "",
     [int]$MaxTokens = 2048,
-    [string]$Reasoning = "off"
+    [string]$Reasoning = "off",
+    [switch]$Help
 )
 
-if (-not $Prompt) {
-    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning off|low|medium|high|on] [-MaxTokens 2048] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
-    exit 1
+function Show-Help {
+    Write-Host @"
+Uncensored LLM Runner - High-Performance Local AI Execution (Windows)
+
+Usage:
+  .\ask.ps1 -Prompt "Your prompt here"
+  .\ask.ps1 -Model gemma|qwen [-Reasoning off|low|medium|high|on] -Prompt "Your prompt here"
+
+Parameters:
+  -Model <gemma|qwen>                   Pick model architecture (default: gemma)
+                                           • gemma : Gemma 4 E4B OBLITERATED (4.5B Multimodal Text+Vision)
+                                           • qwen  : Qwen 2.5 Coder 7B Abliterated (7.0B Claude Distilled Code)
+  -Reasoning <off|low|medium|high|on>   Set thinking/reasoning effort level (default: off)
+                                           • off    : Fast direct answer starting on line 1
+                                           • low    : Minimal Chain-of-Thought reasoning
+                                           • medium : Balanced Chain-of-Thought reasoning
+                                           • high   : Deep reasoning for complex math/logic
+  -Image <path>                         Path to image file for vision analysis (Gemma model)
+  -MaxTokens <int>                      Maximum generation tokens limit (default: 2048)
+  -Help                                 Show this help message and exit
+
+Examples:
+  .\ask.ps1 -Model gemma -Prompt "Explain binary license validation."
+  .\ask.ps1 -Model qwen -Prompt "Write a Python JWT validation script."
+  .\ask.ps1 -Model gemma -Reasoning high -Prompt "Solve this complex logic puzzle."
+  .\ask.ps1 -Model gemma -Image C:\path\to\diagram.png -Prompt "Describe this image."
+"@
+    exit 0
+}
+
+if ($Help -or (-not $Prompt)) {
+    Show-Help
 }
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
