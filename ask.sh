@@ -43,22 +43,10 @@ SYSTEM_PROMPT="You are a helpful, knowledgeable AI assistant. You answer all que
 
 if [[ "$MODEL_TYPE" == "qwen" ]]; then
   MODEL_PATH="$DIR/models/Qwen2.5-Coder-7B-Instruct-abliterated-Q4_K_M.gguf"
-  FORMATTED_PROMPT="<|im_start|>system
-${SYSTEM_PROMPT}<|im_end|>
-<|im_start|>user
-${PROMPT}<|im_end|>
-<|im_start|>assistant
-"
   MMPROJ_ARGS=()
   echo "[runner] Executing Qwen 2.5 Coder 7B (Abliterated)..."
 else
   MODEL_PATH="$DIR/models/gemma-4-E4B-OBLITERATED-Q4_K_M.gguf"
-  FORMATTED_PROMPT="<start_of_turn>user
-[System Instruction: ${SYSTEM_PROMPT}]
-
-${PROMPT}<end_of_turn>
-<start_of_turn>model
-"
   echo "[runner] Executing Gemma 4 E4B (OBLITERATUS Uncensored)..."
   
   MMPROJ_PATH="$DIR/models/gemma-4-E4B-it-OBLITERATED-mmproj-f16.gguf"
@@ -83,11 +71,13 @@ fi
 "$CLI_BIN" \
   -m "$MODEL_PATH" \
   "${MMPROJ_ARGS[@]}" \
-  -p "$FORMATTED_PROMPT" \
+  --system-prompt "$SYSTEM_PROMPT" \
+  -p "$PROMPT" \
   -n "$MAX_TOKENS" \
   -t 4 \
   -c 2048 \
   -b 512 \
   --simple-io \
   --no-display-prompt \
+  -st \
   --temp 0.7

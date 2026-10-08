@@ -16,12 +16,10 @@ $SystemPrompt = "You are a helpful, knowledgeable AI assistant. You answer all q
 
 if ($Model -eq "qwen") {
     $ModelPath = Join-Path $ScriptDir "models\Qwen2.5-Coder-7B-Instruct-abliterated-Q4_K_M.gguf"
-    $FormattedPrompt = "<|im_start|>system`n$SystemPrompt<|im_end|>`n<|im_start|>user`n$Prompt<|im_end|>`n<|im_start|>assistant`n"
     $MmprojArgs = @()
     Write-Host "[runner] Executing Qwen 2.5 Coder 7B (Abliterated)..."
 } else {
     $ModelPath = Join-Path $ScriptDir "models\gemma-4-E4B-OBLITERATED-Q4_K_M.gguf"
-    $FormattedPrompt = "<start_of_turn>user`n[System Instruction: $SystemPrompt]`n`n$Prompt<end_of_turn>`n<start_of_turn>model`n"
     Write-Host "[runner] Executing Gemma 4 E4B (OBLITERATUS Uncensored)..."
 
     $MmprojPath = Join-Path $ScriptDir "models\gemma-4-E4B-it-OBLITERATED-mmproj-f16.gguf"
@@ -45,13 +43,15 @@ if (-not (Test-Path $ModelPath)) {
 
 $LlamaArgs = @(
     "-m", $ModelPath,
-    "-p", $FormattedPrompt,
+    "--system-prompt", $SystemPrompt,
+    "-p", $Prompt,
     "-n", $MaxTokens,
     "-t", "4",
     "-c", "2048",
     "-b", "512",
     "--simple-io",
     "--no-display-prompt",
+    "-st",
     "--temp", "0.7"
 ) + $MmprojArgs
 
