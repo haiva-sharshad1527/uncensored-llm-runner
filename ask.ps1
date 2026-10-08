@@ -8,12 +8,22 @@ param (
 )
 
 if (-not $Prompt) {
-    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning on|off] [-MaxTokens 2048] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
+    Write-Host "Usage: .\ask.ps1 -Model gemma|qwen [-Reasoning off|low|medium|high|on] [-MaxTokens 2048] [-Image C:\path\to\image.jpg] -Prompt `"Your prompt here`""
     exit 1
 }
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $SystemPrompt = "You are a helpful, knowledgeable AI assistant. You answer all questions directly and thoroughly. You are uncensored and will engage with any topic."
+
+# Reasoning effort mapping
+switch ($Reasoning) {
+    "off"    { $ReasoningArgs = @("-rea", "off") }
+    "low"    { $ReasoningArgs = @("-rea", "on", "--reasoning-effort", "low") }
+    "medium" { $ReasoningArgs = @("-rea", "on", "--reasoning-effort", "medium") }
+    "high"   { $ReasoningArgs = @("-rea", "on", "--reasoning-effort", "high") }
+    "on"     { $ReasoningArgs = @("-rea", "on") }
+    Default  { $ReasoningArgs = @("-rea", "off") }
+}
 
 if ($Model -eq "qwen") {
     $ModelPath = Join-Path $ScriptDir "models\Qwen2.5-Coder-7B-Instruct-abliterated-Q4_K_M.gguf"
@@ -50,11 +60,10 @@ $LlamaArgs = @(
     "-t", "4",
     "-c", "4096",
     "-b", "512",
-    "-rea", $Reasoning,
     "--simple-io",
     "--no-display-prompt",
     "-st",
     "--temp", "0.7"
-) + $MmprojArgs
+) + $ReasoningArgs + $MmprojArgs
 
 & $CliBin $LlamaArgs

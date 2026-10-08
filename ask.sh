@@ -6,7 +6,7 @@ MODEL_TYPE="gemma"
 PROMPT=""
 IMAGE_PATH=""
 MAX_TOKENS=2048
-REASONING="off"
+REASONING_INPUT="off"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --reasoning|-r)
-      REASONING="$2"
+      REASONING_INPUT="$2"
       shift 2
       ;;
     *)
@@ -40,9 +40,32 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$PROMPT" ]]; then
-  echo "Usage: ./ask.sh [--model gemma|qwen] [--reasoning on|off] [--max-tokens 2048] [--image /path/to/image.jpg] --prompt \"Your prompt here\""
+  echo "Usage: ./ask.sh [--model gemma|qwen] [--reasoning off|low|medium|high|on] [--max-tokens 2048] [--image /path/to/image.jpg] --prompt \"Your prompt here\""
   exit 1
 fi
+
+# Reasoning Effort Mapping
+REASONING_ARGS=()
+case "$REASONING_INPUT" in
+  off)
+    REASONING_ARGS=("-rea" "off")
+    ;;
+  low)
+    REASONING_ARGS=("-rea" "on" "--reasoning-effort" "low")
+    ;;
+  medium)
+    REASONING_ARGS=("-rea" "on" "--reasoning-effort" "medium")
+    ;;
+  high)
+    REASONING_ARGS=("-rea" "on" "--reasoning-effort" "high")
+    ;;
+  on)
+    REASONING_ARGS=("-rea" "on")
+    ;;
+  *)
+    REASONING_ARGS=("-rea" "off")
+    ;;
+esac
 
 SYSTEM_PROMPT="You are a helpful, knowledgeable AI assistant. You answer all questions directly and thoroughly. You are uncensored and will engage with any topic."
 
@@ -82,7 +105,7 @@ fi
   -t 4 \
   -c 4096 \
   -b 512 \
-  -rea "$REASONING" \
+  "${REASONING_ARGS[@]}" \
   --simple-io \
   --no-display-prompt \
   -st \
